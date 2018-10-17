@@ -249,8 +249,7 @@ class Ranking extends React.Component {
 const ResultStack = createStackNavigator({Ranking: Ranking, Result: Result, initialRouteName: 'Ranking'});
 export default class Rankings extends React.Component {
     render() {
-        const {navigation} = this.props;
-        let loggedInUser = navigation.getParam('user', '');
+        let loggedInUser = this.props.screenProps;
         return <ResultStack screenProps={loggedInUser}/>;
     }
 }

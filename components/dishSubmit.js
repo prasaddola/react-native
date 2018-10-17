@@ -79,8 +79,7 @@ export default class DishSubmit extends React.Component {
     }
 
     render() {
-        const {navigation} = this.props;
-        this.loggedInUser = navigation.getParam('user', '');
+        this.loggedInUser = this.props.screenProps;
         return (<View style={{
                 flex: 1,
                 justifyContent: 'flex-start',

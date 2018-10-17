@@ -121,7 +121,18 @@ const styles = StyleSheet.create({
         marginHorizontal: 20
     }
 });
-const RootStack = createStackNavigator({Login: Login, Pool: Pool, initialRouteName: 'Login'});
+const RootStack = createStackNavigator({
+    Login: {
+        screen: Login,
+        navigationOptions: {
+            title: 'LOGIN'
+        }
+    },
+    Pool: {
+        screen: Pool
+    },
+    initialRouteName: 'Login'
+});
 export default class App extends React.Component {
     render() {
         return <RootStack/>;

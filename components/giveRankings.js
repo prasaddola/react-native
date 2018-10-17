@@ -164,15 +164,6 @@ class Ranking extends React.Component {
             {
                 this.state.dataFetched
                     ? <View>
-                            {
-                                this.state.rankSubmitted
-                                    ? <View >
-                                            <Text style={{fontSize: 15}}>Your Submissions</Text>
-                                            {this.getSubmittedRanks()}
-                                            <Text>{"\n"}</Text>
-                                        </View>
-                                    : <Text>{''}</Text>
-                            }
                             <Text style={{
                                     color: 'blue',
                                     fontSize: 20

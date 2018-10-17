@@ -10,8 +10,23 @@ export default class Result extends React.Component {
         super(props);
         this.state = {
             showData: false,
-            dishes: []
+            dishes: [],
+            rankSubmitted: false
         };
+    }
+    getSubmittedRanks() {
+        var items = [];
+        var region = this.state.submittedDishes;
+        for (i = 0; i < region.length; i++) {
+            items.push(<Text key={i} style={{
+                    color: 'green',
+                    fontSize: 20
+                }}>{
+                    'Rank' + (
+                    i + 1) + ' : ' + region[i]
+                }</Text>);
+        }
+        return items;
     }
     componentDidMount() {
         AsyncStorage.getItem('userInfo').then((data) => {
@@ -37,6 +52,9 @@ export default class Result extends React.Component {
             results.sort(function(a, b) {
                 return b[1] - a[1]
             });
+            if (userData[this.loggedInUser].rankSubmissions && userData[this.loggedInUser].rankSubmissions.length) {
+                this.setState({rankSubmitted: true, submittedDishes: userData[this.loggedInUser].rankSubmissions});
+            }
             this.setState({
                 dishes: results
             }, () => {
@@ -45,6 +63,7 @@ export default class Result extends React.Component {
         });
     }
     render() {
+        this.loggedInUser = this.props.screenProps;
         return (<View style={{
                 flex: 1,
                 justifyContent: 'flex-start',
@@ -53,6 +72,15 @@ export default class Result extends React.Component {
             }}>{
                 this.state.showData
                     ? <View style={styles.container}>
+                        {
+                            this.state.rankSubmitted
+                                ? <View >
+                                        <Text style={{fontSize: 15}}>Your Submissions</Text>
+                                        {this.getSubmittedRanks()}
+                                        <Text>{"\n"}</Text>
+                                    </View>
+                                : <Text>{''}</Text>
+                        }
                             <Table borderStyle={{
                                     borderWidth: 2,
                                     borderColor: '#c8e1ff'

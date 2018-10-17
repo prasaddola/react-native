@@ -76,14 +76,16 @@ class Ranking extends React.Component {
         console.log('present submissions', firstiD, secondiD, thirdiD);
         AsyncStorage.getItem('userInfo').then((data) => {
             var userData = JSON.parse(data);
+            console.log('one' , userData);
             if (userData[this.loggedInUser].rankSubmissions && userData[this.loggedInUser].rankSubmissions.length) {
+                console.log('rankSubmissions exist');
                 var firstR = userData[this.loggedInUser].rankSubmissions[0];
                 var secondR = userData[this.loggedInUser].rankSubmissions[1];
                 var thirdR = userData[this.loggedInUser].rankSubmissions[2];
 
                 // reducing marks for already submitted as new dishes are updated
                 for (var key in userData) {
-                    if (key !== this.loggedInUser) {
+                    if (key !== this.loggedInUser && userData[key].dishes) {
                         userData[key].dishes.forEach((item) => {
                             if (item.name === firstiD) {
                                 item.score -= 30;
@@ -101,8 +103,10 @@ class Ranking extends React.Component {
             }
             userData[this.loggedInUser].rankSubmissions = [firstiD, secondiD, thirdiD];
             for (var key in userData) {
-                if (key !== this.loggedInUser) {
+                console.log(key);
+                if (key !== this.loggedInUser && userData[key].dishes) {
                     userData[key].dishes.forEach((item) => {
+                        console.log(item);
                         if (item.name === firstiD) {
                             item.score += 30;
                         } else if (item.name === secondiD) {

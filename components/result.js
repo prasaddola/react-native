@@ -19,12 +19,14 @@ export default class Result extends React.Component {
             var userData = JSON.parse(data);
             var results = [];
             Object.keys(userData).forEach((key) => {
-                userData[key].dishes.forEach((dish) => {
-                    dishes[dish.name] = (
-                        dishes[dish.name]
-                        ? dishes[dish.name]
-                        : 0) + dish.score;
-                });
+                if(userData[key].dishes) {
+                    userData[key].dishes.forEach((dish) => {
+                        dishes[dish.name] = (
+                            dishes[dish.name]
+                            ? dishes[dish.name]
+                            : 0) + dish.score;
+                        });
+                }
             });
             console.log('results', dishes);
             Object.keys(dishes).forEach((key) => {

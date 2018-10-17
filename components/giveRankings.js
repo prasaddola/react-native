@@ -55,7 +55,6 @@ class Ranking extends React.Component {
         return items;
     }
     seeResult = () => {
-        console.log(this.state.submittedDishes);
         if (this.state.submittedDishes.length) {
             this.setState({resultError: false});
             this.props.navigation.navigate('Result');
@@ -66,7 +65,6 @@ class Ranking extends React.Component {
     rankSubmit = () => {
         if ((this.state.firstRankIndex === this.state.secondRankIndex) || (this.state.firstRankIndex === this.state.thirdRankIndex) || (this.state.secondRankIndex === this.state.thirdRankIndex)) {
             this.setState({showRankError: true});
-            console.log('same items selected');
             return;
         }
         this.setState({showRankError: false});
@@ -76,37 +74,33 @@ class Ranking extends React.Component {
         console.log('present submissions', firstiD, secondiD, thirdiD);
         AsyncStorage.getItem('userInfo').then((data) => {
             var userData = JSON.parse(data);
-            console.log('one' , userData);
             if (userData[this.loggedInUser].rankSubmissions && userData[this.loggedInUser].rankSubmissions.length) {
-                console.log('rankSubmissions exist');
                 var firstR = userData[this.loggedInUser].rankSubmissions[0];
                 var secondR = userData[this.loggedInUser].rankSubmissions[1];
                 var thirdR = userData[this.loggedInUser].rankSubmissions[2];
-
+                console.log('before submitting', userData);
                 // reducing marks for already submitted as new dishes are updated
                 for (var key in userData) {
                     if (key !== this.loggedInUser && userData[key].dishes) {
                         userData[key].dishes.forEach((item) => {
-                            if (item.name === firstiD) {
+                            if (item.name === firstR) {
                                 item.score -= 30;
-                            } else if (item.name === secondiD) {
+                            } else if (item.name === secondR) {
                                 item.score -= 20;
-                            } else if (item.name === thirdiD) {
+                            } else if (item.name === thirdR) {
                                 item.score -= 10;
                             } else {
                                 console.log('this item not in the selected list');
                             }
                         })
-                        console.log(key);
                     }
                 }
+                console.log('reducing marks', userData);
             }
             userData[this.loggedInUser].rankSubmissions = [firstiD, secondiD, thirdiD];
             for (var key in userData) {
-                console.log(key);
                 if (key !== this.loggedInUser && userData[key].dishes) {
                     userData[key].dishes.forEach((item) => {
-                        console.log(item);
                         if (item.name === firstiD) {
                             item.score += 30;
                         } else if (item.name === secondiD) {
@@ -119,7 +113,7 @@ class Ranking extends React.Component {
                     })
                 }
             }
-            console.log(userData);
+            console.log('adding marks', userData);
             AsyncStorage.setItem('userInfo', data, () => {
                 AsyncStorage.mergeItem('userInfo', JSON.stringify(userData), () => {
                     this.setState({resultError: false});
@@ -152,7 +146,6 @@ class Ranking extends React.Component {
             }
 
             if (userData[this.loggedInUser].rankSubmissions && userData[this.loggedInUser].rankSubmissions.length) {
-                console.log(userData[this.loggedInUser].rankSubmissions);
                 this.setState({rankSubmitted: true, submittedDishes: userData[this.loggedInUser].rankSubmissions});
             }
 

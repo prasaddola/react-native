@@ -27,6 +27,8 @@ export default class DishSubmit extends React.Component {
     }
     dishEntry = () => {
         let user = this.loggedInUser
+        let updatedScore1 = 0;
+        let updatedScore2 = 0;
         if (!this.state.dish1 || !this.state.dish2 || (this.state.dish1 === this.state.dish2)) {
             this.setState({showErrorMsg: true});
             return;
@@ -39,16 +41,24 @@ export default class DishSubmit extends React.Component {
                         dishesAvailable = true;
                     }
                 });
+                if(userData[user].dishes) {
+                    if (userData[user].dishes[0].name === this.state.dish1) {
+                        updatedScore1 = userData[user].dishes[0].score;
+                    }
+                    if (userData[user].dishes[1].name === this.state.dish2) {
+                        updatedScore2 = userData[user].dishes[1].score;
+                    }
+                }
                 userData[user].dishes = [];
                 userData[user].dishes.push({
                     'name': this.state.dish1,
                     'id': user + '1',
-                    'score': 0
+                    'score': updatedScore1
                 });
                 userData[user].dishes.push({
                     'name': this.state.dish2,
                     'id': user + '2',
-                    'score': 0
+                    'score': updatedScore2
                 });
                 AsyncStorage.setItem('userInfo', data, () => {
                     AsyncStorage.mergeItem('userInfo', JSON.stringify(userData), () => {
